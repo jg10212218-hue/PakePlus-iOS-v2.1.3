@@ -1,37 +1,898 @@
-const removeSel = (selector) => {
-    const ele = document.querySelector(selector)
-    if (ele) {
-        console.log(`Removing element: ${selector}`)
-        ele.style.display = 'none'
+window.addEventListener("DOMContentLoaded",()=>{const t=document.createElement("script");t.src="https://www.googletagmanager.com/gtag/js?id=G-W5GKHM0893",t.async=!0,document.head.appendChild(t);const n=document.createElement("script");n.textContent="window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-W5GKHM0893');",document.body.appendChild(n)});// very important, if you don't know what it is, don't touch it
+// 非常重要，不懂代码不要动，这里可以解决80%的问题，也可以生产1000+的bug
+const hookClick = (e) => {
+    const origin = e.target.closest('a')
+    const isBaseTargetBlank = document.querySelector(
+        'head base[target="_blank"]'
+    )
+    console.log('origin', origin, isBaseTargetBlank)
+    if (
+        (origin && origin.href && origin.target === '_blank') ||
+        (origin && origin.href && isBaseTargetBlank)
+    ) {
+        e.preventDefault()
+        console.log('handle origin', origin)
+        location.href = origin.href
     } else {
-        console.log(`Element not found for selector: ${selector}`)
+        console.log('not handle origin', origin)
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded and parsed')
-    const observer = new MutationObserver(() => {
-        removeSel('.title-wrap')
-        removeSel('.rule-btn-wrap')
-        removeSel('.gd-desc')
-        removeSel('.myapp')
-        removeSel('body > uni-app > uni-page > uni-page-wrapper > uni-page-body > uni-view > uni-view.page-wrap-bd > uni-view:nth-child(4)')
-        removeSel('body > uni-app > uni-page > uni-page-wrapper > uni-page-body > uni-view > uni-view.home-page > uni-view.home-body > uni-view.cate-wrap > uni-view:nth-child(4)')
-        removeSel('body > uni-app > uni-page > uni-page-wrapper > uni-page-body > uni-view > uni-view.home-page > uni-view.home-body > uni-view.cate-wrap > uni-view:nth-child(5)')
-        removeSel('body > uni-app > uni-page > uni-page-wrapper > uni-page-body > uni-view > uni-view.home-page > uni-view.home-body > uni-view.cate-wrap > uni-view:nth-child(6)')
-        if(document.querySelector(".coupon")){
-            document.querySelector(".coupon").style.height = "100vh"
+window.open = function (url, target, features) {
+    console.log('open', url, target, features)
+    
+    if (!url) {
+        return
+    }
+    
+    // 解析 URL 中的 token
+    let token = ''
+    try {
+        const urlObj = new URL(url, window.location.origin)
+        token = urlObj.searchParams.get('token') || ''
+        console.log('提取的 token:', token)
+    } catch (e) {
+        console.warn('URL 解析失败:', e)
+    }
+    
+    if (token) {
+        // 构建 ttcGlobalState 对象
+        const ttcGlobalState = {
+            "token": token,
+            "isReadGuide": true,
+            "userInfo": {
+                "wechatInfo": {},
+                "businessInfo": {
+                    "id": 1,
+                    "contractUserIdList": null,
+                    "maxUserCount": 100000,
+                    "businessMemo": "内部企业",
+                    "businessName": "HGD",
+                    "businessType": 0,
+                    "businessStatus": 1,
+                    "adminInfo": null
+                },
+                "userUuid": "9a55cd81-abff-490f-9a50-28a7360c2400",
+                "userName": "ADMIN",
+                "realName": "ADMIN",
+                "accountStatus": "USE",
+                "tokenValue": token,  // 设置 tokenValue 为提取的 token
+                "verifyMessage": null,
+                "codeVerify": false,
+                "userFrontendConfig": null,
+                "systemAdmin": false,
+                "phone": "13137575222",
+                "email": "ADMIN@emposat.com",
+                "validType": 1
+            },
+            "headerStatus": true,
+            "navList": [
+                {
+                    "applicationName": "main-app",
+                    "routeView": "/dashboard",
+                    "routeName": "总览",
+                    "routeType": "hash",
+                    "buildType": "vite",
+                    "routeIcon": {
+                        "name": "House",
+                        "__name": "house"
+                    },
+                    "clearable": false
+                },
+                {
+                    "systemName": "轨道管理",
+                    "applicationName": "orbit",
+                    "routeView": "/trackList",
+                    "routeName": "轨道管理",
+                    "routeType": "hash",
+                    "buildType": "vite",
+                    "realApplication": "",
+                    "appIcon": null,
+                    "routeIcon": "orbit-trackList",
+                    "fiber": false
+                },
+                {
+                    "systemName": "碰撞预警",
+                    "applicationName": "collision-warningweb",
+                    "routeView": "/collision-warningweb",
+                    "routeName": "碰撞预警",
+                    "routeType": "hash",
+                    "buildType": "vite",
+                    "realApplication": "",
+                    "appIcon": null,
+                    "routeIcon": "orbit-collision-warningweb",
+                    "fiber": false
+                }
+            ],
+            "currentNav": "collision-warningweb_/collision-warningweb",
+            "oldNav": "main-app_/dashboard",
+            "lang": "zh",
+            "systemConfig": {
+                "isSystemOpen": false,
+                "isAlarmTipOpen": false,
+                "pageGap": "12px"
+            },
+            "theme": {
+                "themeCssVar": {
+                    "scrollbar": {
+                        "width": "8px",
+                        "border-radius": "2px",
+                        "thumb-background": "rgba(247, 119, 54, 0.5)",
+                        "background": "#12131B",
+                        "wide-width": "8px"
+                    },
+                    "text": {
+                        "color-success": "rgba(50, 215, 75, 1)",
+                        "color-error": "rgba(255, 69, 58, 1)",
+                        "color-warning": "rgba(255, 159, 10, 1)",
+                        "color-title": "#ffffff",
+                        "color-body": "rgba(255, 255, 255, 1)",
+                        "color-plain": "#656B87"
+                    },
+                    "loading": {
+                        "background": "rgba(0, 0, 0, 0.25)",
+                        "color": "rgba(247, 119, 54, 1)"
+                    },
+                    "layout": {
+                        "header-background": "#20222C",
+                        "header-height": "56px",
+                        "header-shadow": "0px 20px 30px -3px",
+                        "header-shadow-color": "rgba(13, 12, 18, 0.63)",
+                        "aside-width": "185px",
+                        "nav-background": "#09080D",
+                        "background": "#12131B",
+                        "body-background": "#20222C",
+                        "body-padding": "16px",
+                        "body-margin": "16px",
+                        "nav-border-right-color": "rgba(255, 255, 255, 0)",
+                        "header-border-bottom-color": "rgba(68, 70, 87, 0)",
+                        "card-background": "#20222C",
+                        "card-border-radius": "10px",
+                        "card-box-shadow": "0px 0px 22px -7px",
+                        "card-box-shadow-color": "rgba(11,11,13,1)",
+                        "pagination-height": "50px",
+                        "pagination-border-top-color": "rgba(53, 55, 71, 0)",
+                        "pagination-margin-top": "16px",
+                        "aside-shadow": "16px 4px 35px -3px",
+                        "aside-shadow-color": "rgba(0, 0, 0, 0.12)",
+                        "body-border-radius": "5px",
+                        "tabs-height": "36px",
+                        "tabs-background": "#2C2F3B",
+                        "tabs-shadow": "0px 21px 35px -3px",
+                        "tabs-shadow-color": "rgba(0, 0, 0, 0.8)",
+                        "tabs-item-background": "#11141C",
+                        "tabs-item-active-background": "rgba(247, 119, 54, 0.27)",
+                        "tabs-item-gap": "6px",
+                        "tabs-item-text-color": "#8C8D91",
+                        "tabs-item-active-text-color": "rgba(255, 255, 255, 1)",
+                        "tabs-item-active-bar-color": "#F77736",
+                        "card-padding": "10px"
+                    },
+                    "border-radius": {
+                        "small": "2px",
+                        "medium": "4px",
+                        "large": "6px"
+                    },
+                    "font": {
+                        "size-smaller": "12px",
+                        "size-small": "14px",
+                        "size-medium": "15px",
+                        "size-large": "16px",
+                        "size-larger": "18px",
+                        "size-largest": "22px",
+                        "weight-normal": "500",
+                        "weight-bold": "500",
+                        "weight-bolder": "600"
+                    },
+                    "color": {
+                        "main-100": "rgba(247,119,54, 1)",
+                        "main-85": "rgba(247,119,54, 0.85)",
+                        "main-70": "rgba(247,119,54, 0.7)",
+                        "main-65": "rgba(247,119,54, 0.65)",
+                        "main-50": "rgba(247,119,54, 0.5)",
+                        "main-35": "rgba(247,119,54, 0.35)",
+                        "main-20": "rgba(247,119,54, 0.2)",
+                        "main-5": "rgba(247,119,54, 0.05)",
+                        "success-100": "rgba(50,215,75, 1)",
+                        "success-85": "rgba(50,215,75, 0.85)",
+                        "success-70": "rgba(50,215,75, 0.7)",
+                        "success-65": "rgba(50,215,75, 0.65)",
+                        "success-50": "rgba(50,215,75, 0.5)",
+                        "success-35": "rgba(50,215,75, 0.35)",
+                        "success-20": "rgba(50,215,75, 0.2)",
+                        "success-5": "rgba(50,215,75, 0.05)",
+                        "warning-100": "rgba(255,159,10, 1)",
+                        "warning-85": "rgba(255,159,10, 0.85)",
+                        "warning-70": "rgba(255,159,10, 0.7)",
+                        "warning-65": "rgba(255,159,10, 0.65)",
+                        "warning-50": "rgba(255,159,10, 0.5)",
+                        "warning-35": "rgba(255,159,10, 0.35)",
+                        "warning-20": "rgba(255,159,10, 0.2)",
+                        "warning-5": "rgba(255,159,10, 0.05)",
+                        "error-100": "rgba(255,69,58, 1)",
+                        "error-85": "rgba(255,69,58, 0.85)",
+                        "error-70": "rgba(255,69,58, 0.7)",
+                        "error-65": "rgba(255,69,58, 0.65)",
+                        "error-50": "rgba(255,69,58, 0.5)",
+                        "error-35": "rgba(255,69,58, 0.35)",
+                        "error-20": "rgba(255,69,58, 0.2)",
+                        "error-5": "rgba(255,69,58, 0.05)",
+                        "info-100": "rgba(100,210,255, 1)",
+                        "info-85": "rgba(100,210,255, 0.85)",
+                        "info-70": "rgba(100,210,255, 0.7)",
+                        "info-65": "rgba(100,210,255, 0.65)",
+                        "info-50": "rgba(100,210,255, 0.5)",
+                        "info-35": "rgba(100,210,255, 0.35)",
+                        "info-20": "rgba(100,210,255, 0.2)",
+                        "info-5": "rgba(100,210,255, 0.05)",
+                        "neutral-100": "rgba(142,142,147, 1)",
+                        "neutral-85": "rgba(142,142,147, 0.85)",
+                        "neutral-70": "rgba(142,142,147, 0.7)",
+                        "neutral-65": "rgba(142,142,147, 0.65)",
+                        "neutral-50": "rgba(142,142,147, 0.5)",
+                        "neutral-35": "rgba(142,142,147, 0.35)",
+                        "neutral-20": "rgba(142,142,147, 0.2)",
+                        "neutral-5": "rgba(142,142,147, 0.05)"
+                    },
+                    "button": {
+                        "height": "36px",
+                        "font-size": "16px",
+                        "border-radius": "4px",
+                        "background": "#F77736",
+                        "border-color": "#F77736",
+                        "text-color": "rgba(255, 255, 255, 1)",
+                        "hover-background": "rgba(247, 119, 54, 0.6)",
+                        "hover-border-color": "rgba(247, 119, 54, 0.5)",
+                        "hover-text-color": "rgba(207, 193, 193, 1)",
+                        "active-background": "#F77736",
+                        "active-border-color": "#F77736",
+                        "active-text-color": "#FFFFFF",
+                        "disabled-background": "#242531",
+                        "disabled-text-color": "#505466",
+                        "disabled-border-color": "#242531",
+                        "plain-background": "rgba(247, 119, 54, 0.11)",
+                        "plain-border-color": "rgba(247, 119, 54, 0.11)",
+                        "plain-text-color": "#F77736",
+                        "plain-hover-background": "rgba(255, 255, 255, 0)",
+                        "plain-hover-text-color": "rgba(108, 44, 12, 1)",
+                        "plain-hover-border-color": "rgba(247, 119, 54, 0.4)",
+                        "plain-active-background": "rgba(247, 119, 54, 0.2)",
+                        "plain-active-text-color": "#F77736",
+                        "plain-active-border-color": "#F77736",
+                        "text-btn-text-color": "#F77736",
+                        "text-btn-hover-text-color": "rgba(108, 44, 12, 1)",
+                        "text-btn-hover-background": "rgba(255, 255, 255, 0)"
+                    },
+                    "input": {
+                        "height": "36px",
+                        "font-size": "14px",
+                        "border-radius": "4px",
+                        "background": "#15131D",
+                        "border-color": "rgba(95, 98, 124, 0.50)",
+                        "text-color": "rgba(255, 255, 255, 1)",
+                        "placeholder-text-color": "rgba(111, 116, 139, 1)",
+                        "hover-background": "rgba(36, 33, 46, 1)",
+                        "hover-border-color": "rgba(95, 98, 124, 1)",
+                        "hover-text-color": "rgba(255, 255, 255, 1)",
+                        "active-background": "#15131D",
+                        "active-border-color": "rgba(247, 119, 54, 0.39)",
+                        "active-text-color": "rgba(255, 255, 255, 1)",
+                        "disabled-background": "#242531",
+                        "disabled-border-color": "#242531",
+                        "disabled-text-color": "#505466",
+                        "append-background": "rgba(255, 255, 255, 0)",
+                        "append-text-color": "#F77736"
+                    },
+                    "select": {
+                        "icon-size": "14px",
+                        "border-radius": "4px",
+                        "height": "36px",
+                        "icon-color": "#505466",
+                        "icon-hover-color": "rgba(95, 98, 124, 1)",
+                        "dropdown-background": "#15131D",
+                        "dropdown-arrow-background": "#15131D",
+                        "dropdown-item-background": "#15131D",
+                        "dropdown-item-text-color": "#ffffff",
+                        "dropdown-item-hover-background": "#423635",
+                        "dropdown-item-hover-text-color": "#F77736",
+                        "dropdown-item-selected-background": "#15131D",
+                        "dropdown-item-selected-text-color": "#ffffff",
+                        "disabled-icon-color": "#505466"
+                    },
+                    "switch": {
+                        "width": "40px",
+                        "action-width": "16px",
+                        "border-radius": "20px",
+                        "height": "20px",
+                        "action-height": "16px",
+                        "action-border-radius": "50%",
+                        "on-background": "rgba(247, 119, 54, 1)",
+                        "action-on-background": "rgba(255, 255, 255, 1)",
+                        "off-background": "rgba(85, 87, 112, 1)",
+                        "action-off-background": "rgba(166, 174, 206, 1)",
+                        "disabled-border-color": " #242531",
+                        "disabled-opacity": "0.6#242531",
+                        "disabled-on-background": "#191723",
+                        "disabled-action-on-background": "#505466",
+                        "disabled-off-background": "#505466",
+                        "disabled-action-off-background": "#191723"
+                    },
+                    "checkbox": {
+                        "width": "14px",
+                        "height": "14px",
+                        "border-radius": "2px",
+                        "font-size": "14px",
+                        "background": "#15161E",
+                        "border-color": "rgba(255, 255, 255, 1)",
+                        "text-color": "rgba(255, 255, 255, 1)",
+                        "checked-text-color": "rgba(255, 255, 255, 1)",
+                        "checked-background": "rgba(42, 21, 21, 0)",
+                        "checked-icon-color": "#F77736",
+                        "checked-border-color": "#F77736",
+                        "disabled-checked-text-color": "#505466",
+                        "disabled-checked-background": "#191723",
+                        "disabled-checked-icon-color": "#242531",
+                        "disabled-checked-border-color": "#505466",
+                        "disabled-text-color": "#505466",
+                        "disabled-background": "#242531",
+                        "disabled-border-color": "#505466",
+                        "hover-border-color": "#F77736"
+                    },
+                    "radio": {
+                        "font-size": "14px",
+                        "width": "14px",
+                        "height": "14px",
+                        "border-radius": "50%",
+                        "text-color": "rgba(255, 255, 255, 1)",
+                        "background": "#15161E",
+                        "border-color": "rgba(255, 255, 255, 1)",
+                        "hover-border-color": "#F77736",
+                        "checked-background": "#F77736",
+                        "checked-point-background": "#191723",
+                        "checked-border-color": "#F77736",
+                        "disabled-checked-text-color": "#505466",
+                        "disabled-checked-background": "#505466",
+                        "disabled-checked-border-color": "#505466",
+                        "disabled-text-color": "#505466",
+                        "disabled-background": "#242531",
+                        "disabled-border-color": "#505466",
+                        "disabled-checked-point-background": "#242531",
+                        "checked-text-color": "#F77736"
+                    },
+                    "tag": {
+                        "font-size": "14px",
+                        "border-radius": "4px",
+                        "height": "24px",
+                        "background": "#F77736",
+                        "border-color": "#F77736",
+                        "text-color": "#FFFFFF",
+                        "hover-background": "rgba(247, 119, 54, 0.6)",
+                        "hover-border-color": "rgba(247, 119, 54, 0.6)",
+                        "hover-text-color": "rgba(207, 193, 193, 1)",
+                        "plain-background": "rgba(247, 119, 54, 0.11)",
+                        "plain-border-color": "rgba(247, 119, 54, 0.11)",
+                        "plain-text-color": "#F77736",
+                        "plain-hover-background": "rgba(46, 24, 23, 0)",
+                        "plain-hover-text-color": "rgba(108, 44, 12, 1)",
+                        "plain-hover-border-color": "rgba(247, 119, 54, 0.4)"
+                    },
+                    "date-picker": {
+                        "icon-color": "rgba(247, 247, 247, 1)",
+                        "hover-icon-color": "#F77736",
+                        "border-color": "rgba(255, 255, 255, 0)",
+                        "background": "#15131D",
+                        "text-color": "rgba(255, 255, 255, 1)",
+                        "hover-text-color": "#F77736",
+                        "footer-background": "#15131D",
+                        "off-text-color": "#5F627C",
+                        "inner-border-color": "rgba(95, 98, 124, 0.33)",
+                        "header-week-text-color": "#F77736",
+                        "inrange-background": "rgba(66, 54, 53, 0.2)",
+                        "hover-inrange-background": "rgba(66, 54, 53, 0.3)",
+                        "active-background": "rgba(66, 54, 53, 0.3)",
+                        "active-text-color": "rgba(255, 255, 255, 1)",
+                        "week-bottom-border-color": "rgba(66, 54, 53, 0.3)",
+                        "time-select-text-color": "rgba(255, 255, 255, 0.5)",
+                        "time-select-hover-text-background": "rgba(66, 54, 53, 0.5)",
+                        "time-select-active-text-color": "#F77736",
+                        "time-select-border-color": "rgba(66, 54, 53, 0.5)",
+                        "time-select-cancel-btn-color": "rgba(255, 255, 255, 0.6)",
+                        "time-select-confirm-btn-color": "#F77736",
+                        "header-label-text-color": "#F77736",
+                        "today-text-color": "rgba(255, 255, 255, 1)",
+                        "today-background": "#F77736",
+                        "start-end-time-color": "#F77736",
+                        "start-end-time-background-color": "rgba(247, 119, 54, 0.15)"
+                    },
+                    "table": {
+                        "header-height": "50px",
+                        "header-font-size": "16px",
+                        "header-border-radius": "4px",
+                        "header-background": "#12131B",
+                        "header-text-color": "#fff",
+                        "body-font-size": "14px",
+                        "row-height": "40px",
+                        "row-background": "#292A37",
+                        "row-even-background": "#1A1B24",
+                        "row-text-color": "rgba(255, 255, 255, 1)",
+                        "row-border-bottom-color": "#44465A",
+                        "row-hover-background": "#423635",
+                        "row-hover-text-color": "rgba(255, 255, 255, 1)",
+                        "row-select-background": "#423635",
+                        "row-select-text-color": "rgba(255, 255, 255, 1)",
+                        "row-success-background": "#387164",
+                        "row-error-background": "#70394F",
+                        "row-warning-background": "#705D3E",
+                        "operate-text-color": "#F77736",
+                        "operate-warning-text-color": "#F77736",
+                        "header-border-width": "1px",
+                        "header-border-color": "rgba(38, 40, 57, 1)",
+                        "eyepro-row-background": "rgba(8, 8, 11, 1)"
+                    },
+                    "pagination": {
+                        "background": "transparent",
+                        "text-color": "#636672",
+                        "font-size": "14px",
+                        "total-text-color": "#888895",
+                        "active-item-color": "#ffffff",
+                        "active-item-border-color": "rgba(237, 131, 93, 0)",
+                        "active-item-background": "rgba(247, 119, 54, 0.1)",
+                        "active-item-border-radius": "4px"
+                    },
+                    "tabs": {
+                        "item-text-color": "#ffffff",
+                        "active-item-text-color": "#F77736",
+                        "card-active-item-text-color": "rgba(255, 255, 255, 1)",
+                        "bar-color": "#656B87",
+                        "active-bar-color": "#F77736",
+                        "item-space": "20px",
+                        "card-border-color": "rgba(95, 98, 124,0)",
+                        "active-card-background": "rgba(247, 119, 54, 1)"
+                    },
+                    "menu": {
+                        "font-size": "14px",
+                        "width": "185px",
+                        "item-horizontal-margin": "24px",
+                        "sub-item-left-margin": "30px",
+                        "icon-width": "18px",
+                        "item-height": "50px",
+                        "horizontal-sub-item-height": "40px",
+                        "sub-item-height": "40px",
+                        "background": "#09080D",
+                        "border-color": "#09080D",
+                        "item-text-color": "#FFFFFF",
+                        "item-background": "#09080D",
+                        "item-hover-text-color": "#F77736",
+                        "item-hover-background": "#423635",
+                        "item-active-text-color": "#F77736",
+                        "item-active-background": "rgba(30, 27, 43, 0)",
+                        "icon-main-color": "#ffffff",
+                        "icon-plain-color": "#ffffff",
+                        "icon-main-hover-color": "#F77736",
+                        "icon-plain-hover-color": "#F77736",
+                        "icon-main-active-color": "#F77736",
+                        "icon-plain-active-color": "#F77736",
+                        "item-gap": "4px",
+                        "icon-right-gap": "14px",
+                        "vertical-padding-top": "24px"
+                    },
+                    "progress": {
+                        "font-size": "14px",
+                        "border-radius": "20px",
+                        "background": "#12131B",
+                        "active-background": "#FF6961",
+                        "active-text-color": "rgba(255, 255, 255, 1)",
+                        "text-color": "rgba(255, 255, 255, 1)",
+                        "circle-active-background": "#FF6961",
+                        "height": "20px",
+                        "active-label-text-color": "rgba(71,238,79, 1)",
+                        "label-text-color": "#AEAEB2",
+                        "gap": "10px",
+                        "font-weight": "400",
+                        "shield-background": "#D62F4F",
+                        "task-active-background": "#A06A44"
+                    },
+                    "dialog": {
+                        "padding": "24px",
+                        "border-radius": "6px",
+                        "header-height": "0px",
+                        "header-font-size": "16px",
+                        "header-text-color": "rgba(255, 255, 255, 1)",
+                        "overlay-background": "rgba(0, 0, 0, 0.6)",
+                        "background": "#15131D",
+                        "body-padding": "16px  0",
+                        "close-icon-color": "#fff",
+                        "close-icon-hover-color": "#fff",
+                        "header-margin-bottom": "24px",
+                        "footer-btn-gap": "16px",
+                        "footer-margin-top": "8px",
+                        "box-shadow": "0px 7px 19px 0px rgba(0,0,0,0.75)",
+                        "header-font-weight": "700"
+                    },
+                    "background": {
+                        "success": "#ECFCEF",
+                        "warning": "#FCF5EC",
+                        "error": "#FCECEC",
+                        "backdrop": "rgba(255,255,255, 0.1)",
+                        "backdrop-blur": "10px"
+                    },
+                    "logo": {
+                        "rotate": "0",
+                        "color-main": "#F77736",
+                        "color-plain": "#F77736"
+                    },
+                    "chart": {
+                        "background": "#31323F",
+                        "xAxis-text-color": "rgba(255, 255, 255, 0.7)",
+                        "yAxis-text-color": "rgba(255, 255, 255, 0.7)",
+                        "splitLine-color": "rgba(255, 255, 255, 0.2)",
+                        "xAxis-line-color": "rgba(255, 255, 255, 0.2)",
+                        "line-color-1": "#F77736",
+                        "line-color-2": "rgba(111, 101, 221, 1)",
+                        "line-color-3": "rgba(107, 221, 101, 1)",
+                        "line-color-4": "rgba(230, 67, 216, 1)",
+                        "line-color-5": "rgba(221, 101, 165, 1)",
+                        "line-color-6": "rgba(101, 181, 221, 1)",
+                        "legend-color": "rgba(255, 255, 255, 1)",
+                        "line-warning-color": "rgba(247, 54, 99, 1)",
+                        "mark-line-color": "rgba(54, 247, 241, 1)",
+                        "mark-label-color": "rgba(255, 255, 255, 1)",
+                        "mark-label-background-color": "rgba(186, 93, 60, 1)",
+                        "xAxis-mark-line-color": ""
+                    },
+                    "gplot": {
+                        "equipment-NORMAL-text-color": "#F77736",
+                        "equipment-NORMAL-border-color": "#402F2D",
+                        "equipment-NORMAL-background": "#402F2D",
+                        "equipment-OFF_LINE-text-color": "#9AA2B2",
+                        "equipment-OFF_LINE-border-color": "#4F525A",
+                        "equipment-OFF_LINE-background": "#4F525A",
+                        "equipment-WARN-text-color": "rgba(255, 255, 255, 1)",
+                        "equipment-WARN-border-color": "#402F2D",
+                        "equipment-WARN-background": "#402F2D",
+                        "line-SFED-NORMAL-color": "#E89F2A",
+                        "line-NORMAL-color": "#F77736",
+                        "line-OFF_LINE-color": "#4F525A",
+                        "line-WARN-color": "#DA6091",
+                        "LHPC-NORMAL-color": "rgba(255, 255, 255, 1)",
+                        "LHPC-NORMAL-border-color": "#F77736",
+                        "LHPC-NORMAL-background": "#F77736",
+                        "LHPC-OFF_LINE-color": "#9AA2B2",
+                        "LHPC-OFF_LINE-border-color": "#4F525A",
+                        "LHPC-OFF_LINE-background": "#4F525A",
+                        "LHPC-SFED-NORMAL-color": "rgba(255, 255, 255, 1)",
+                        "LHPC-SFED-NORMAL-border-color": "#E89F2A",
+                        "LHPC-SFED-NORMAL-background": "#E89F2A",
+                        "ball-NORMAL-background": "rgba(154, 162, 178, 0.69)",
+                        "ball-SFED-NORMAL-background": "rgba(56, 59, 80, 1)",
+                        "line-animate-ball-color": "rgba(139, 237, 93, 1)",
+                        "equipment-GFQ-background": "#F77736",
+                        "equipment-GFQ-text-color": "#fff",
+                        "ball-OFF_LINE-background": "rgba(132, 137, 166, 1)",
+                        "ball-NORMAL-border-color": "#4F525A",
+                        "ball-OFF_LINE-border-color": "rgba(135, 138, 161, 1)",
+                        "ball-SFED-NORMAL-border-color": "#4F525A",
+                        "equipment-input-NORMAL-background": "#15131D",
+                        "equipment-input-NORMAL-border-color": "#15131D",
+                        "equipment-input-NORMAL-text-color": "rgba(255, 255, 255, 1)",
+                        "equipment-input-WARN-background": "#FFC1CC",
+                        "equipment-input-WARN-border-color": "#FFC1CC",
+                        "equipment-input-WARN-text-color": "#B50057",
+                        "equipment-input-gap": "4px",
+                        "equipment-title-gap": "6px",
+                        "link-AWAIT-line-color": "#F6E790",
+                        "link-AWAIT-text-color": "#B6A546",
+                        "link-AWAIT-SFED-line-color": "#F6E790",
+                        "link-AWAIT-SFED-text-color": "#B6A546"
+                    },
+                    "cesium": {
+                        "view-background": "#12131B",
+                        "view-scene-image": "",
+                        "view-map": "https://cdn.emposat.com/ttc/bucket/1698818788437_PIFU.jpg",
+                        "time-control-color-1": "#E58D5A",
+                        "time-control-color-2": "#E58D5A",
+                        "time-control-color-3": "#1E1B2B",
+                        "time-control-color-4": "rgba(14, 5, 0, 1)",
+                        "time-control-color-5": "rgba(63, 55, 52, 1)",
+                        "time-control-color-6": "#111519",
+                        "time-control-operate-color": "#D46321",
+                        "time-control-operate-background": "rgba(255, 247, 242, 1)",
+                        "time-control-operate-border-color": "#D46321",
+                        "time-control-operate-shadow-color": "rgba(237, 131, 93, 1)",
+                        "time-control-text-color": "rgba(255, 255, 255, 1)",
+                        "time-timeline-color": "#E58D5A",
+                        "time-timeline-background": "#1E1B2B",
+                        "time-timeline-border-color": "#353747",
+                        "time-border-color": "#D46321"
+                    },
+                    "tree": {
+                        "background": "#09080D",
+                        "text-color": "#ffffff",
+                        "expand-icon-color": "#B7B8C4",
+                        "node-height": "26px",
+                        "node-hover-background": "#423635",
+                        "node-hover-text-color": "#F77736",
+                        "node-hover-expand-icon-color": "rgba(255, 255, 255, 1)",
+                        "node-select-background": "rgba(81, 40, 40, 0)",
+                        "node-select-text-color": "#F77736",
+                        "node-select-expand-icon-color": "#F77736"
+                    },
+                    "border": {
+                        "light-color": "rgba(117, 121, 153, 1)",
+                        "deep-color": "rgba(69, 73, 106, 1)"
+                    },
+                    "tooltip": {
+                        "border-radius": "2px",
+                        "border-color": "#ffffff",
+                        "background": "#ffffff",
+                        "text-color": "rgba(51, 51, 51, 1)"
+                    },
+                    "horizontal-menu": {
+                        "padding-top": "0px",
+                        "item-gap": "24px",
+                        "item-active-bar-color": "#F77736",
+                        "item-active-border-height": "3px",
+                        "item-icon-gap": "14px",
+                        "item-hover-text-color": "#F77736",
+                        "item-hover-background": "#423635",
+                        "item-active-text-color": "#F77736",
+                        "item-active-background": "rgba(53, 55, 71, 0)",
+                        "sub-item-gap": "4px",
+                        "sub-padding": "0px"
+                    },
+                    "form": {
+                        "label-font-size": "14px",
+                        "label-text-color": "#ffffff",
+                        "item-gap": "24px",
+                        "label-right-margin": "6px"
+                    },
+                    "equipment-status": {
+                        "radius": "10px",
+                        "OFF_LINE-color": "#8E8E93",
+                        "NORMAL-color": "#32D74B",
+                        "WARN-color": "#FF453A",
+                        "ERROR-color": "#FF9F0A",
+                        "lock-background": "rgba(50, 215, 75, 1)",
+                        "unlock-background": "rgba(255, 69, 58, 1)",
+                        "lock-text-color": "#fff",
+                        "unlock-text-color": "#fff",
+                        "lock-padding": "0 12px",
+                        "lock-border-radius": "4px",
+                        "lock-font-size": "14px",
+                        "lock-box-shadow": "rgba(46, 217, 117, 0)"
+                    },
+                    "alarm": {
+                        "button-main-background": "rgba(251, 90, 149, 1)",
+                        "button-main-box-shadow": "0px 0px 10px 0px rgba(251, 90, 149, 1)",
+                        "button-main-border-color": "rgba(251, 90, 149, 1)",
+                        "button-main-text-color": "rgba(255, 255, 255, 1)",
+                        "button-plain-background": "rgba(185, 25, 76, 1)",
+                        "button-plain-box-shadow": "0px 0px 20px 0px rgba(185, 25, 76, 1)",
+                        "button-plain-text-color": "rgba(255, 255, 255, 1)",
+                        "button-plain-border-color": "rgba(185, 25, 76, 1)",
+                        "animation-time": "0.5s",
+                        "button-circle-size": "14px",
+                        "button-circle-border-color": "rgba(255, 255, 255, 1)",
+                        "button-circle-background": "rgba(255, 255, 255, 0.2)",
+                        "button-circle-box-shadow": ""
+                    },
+                    "exclude": {
+                        "39": {
+                            "chart": {
+                                "background": "#F0F4F8",
+                                "xAxis-text-color": "#929593",
+                                "yAxis-text-color": "#929593",
+                                "splitLine-color": "#929593",
+                                "xAxis-line-color": "#929593",
+                                "line-color-1": "rgba(67, 114, 230, 1)",
+                                "line-color-2": "rgba(67, 230, 119, 1)",
+                                "line-color-3": "rgba(201, 196, 97, 1)",
+                                "line-color-4": "rgba(201, 97, 147, 1)",
+                                "line-color-5": "rgba(123, 97, 201, 1)",
+                                "line-color-6": "rgba(97, 201, 113, 1)",
+                                "legend-color": "#333333",
+                                "line-warning-color": "rgba(230, 67, 146, 1)",
+                                "mark-line-color": "rgba(127, 230, 67, 1)",
+                                "mark-label-color": "rgba(255, 255, 255, 1)",
+                                "mark-label-background-color": "rgba(67, 114, 230, 1)",
+                                "xAxis-mark-line-color": ""
+                            }
+                        },
+                        "40": {
+                            "chart": {
+                                "background": "#090D18",
+                                "xAxis-text-color": "rgba(255, 255, 255, 0.5)",
+                                "yAxis-text-color": "rgba(255, 255, 255, 0.5)",
+                                "splitLine-color": "rgba(255, 255, 255, 0.2)",
+                                "xAxis-line-color": "rgba(255, 255, 255, 0.2)",
+                                "line-color-1": "#48A7FF",
+                                "line-color-2": "rgba(255, 56, 123, 1)",
+                                "line-color-3": "rgba(67, 114, 230, 1)",
+                                "line-color-4": "rgba(175, 255, 56, 1)",
+                                "line-color-5": "rgba(255, 201, 84, 1)",
+                                "line-color-6": "rgba(248, 184, 90, 1)",
+                                "legend-color": "rgba(255, 255, 255, 0.5)",
+                                "line-warning-color": "rgba(255, 72, 127, 1)",
+                                "mark-line-color": "rgba(72, 255, 231, 1)",
+                                "mark-label-color": "rgba(255, 255, 255, 1)",
+                                "mark-label-background-color": "#48A7FF",
+                                "xAxis-mark-line-color": ""
+                            }
+                        },
+                        "59": {
+                            "chart": {
+                                "background": "#31323F",
+                                "xAxis-text-color": "rgba(255, 255, 255, 0.7)",
+                                "yAxis-text-color": "rgba(255, 255, 255, 0.7)",
+                                "splitLine-color": "rgba(255, 255, 255, 0.2)",
+                                "xAxis-line-color": "rgba(255, 255, 255, 0.2)",
+                                "line-color-1": "#F77736",
+                                "line-color-2": "rgba(111, 101, 221, 1)",
+                                "line-color-3": "rgba(107, 221, 101, 1)",
+                                "line-color-4": "rgba(230, 67, 216, 1)",
+                                "line-color-5": "rgba(221, 101, 165, 1)",
+                                "line-color-6": "rgba(101, 181, 221, 1)",
+                                "legend-color": "rgba(255, 255, 255, 1)",
+                                "line-warning-color": "rgba(247, 54, 99, 1)",
+                                "mark-line-color": "rgba(54, 247, 241, 1)",
+                                "mark-label-color": "rgba(255, 255, 255, 1)",
+                                "mark-label-background-color": "rgba(186, 93, 60, 1)",
+                                "xAxis-mark-line-color": ""
+                            }
+                        },
+                        "68": {
+                            "chart": {
+                                "background": "#F4F5F6",
+                                "xAxis-text-color": "#929593",
+                                "yAxis-text-color": "#929593",
+                                "splitLine-color": "rgba(51, 51, 51, 0.2)",
+                                "xAxis-line-color": "rgba(51, 51, 51, 0.2)",
+                                "line-color-1": "#167C6F",
+                                "line-color-2": "rgba(230, 200, 67, 1)",
+                                "line-color-3": "rgba(110, 230, 67, 1)",
+                                "line-color-4": "rgba(230, 67, 216, 1)",
+                                "line-color-5": "rgba(67, 230, 230, 1)",
+                                "line-color-6": "rgba(188, 45, 114, 1)",
+                                "legend-color": "#929593",
+                                "line-warning-color": "rgba(178, 34, 92, 1)",
+                                "mark-line-color": "rgba(39, 218, 126, 1)",
+                                "mark-label-color": "rgba(255, 255, 255, 1)",
+                                "mark-label-background-color": "#C35F5F",
+                                "xAxis-mark-line-color": ""
+                            }
+                        },
+                        "69": {
+                            "chart": {
+                                "background": "#31323F",
+                                "xAxis-text-color": "rgba(255, 255, 255, 0.7)",
+                                "yAxis-text-color": "rgba(255, 255, 255, 0.7)",
+                                "splitLine-color": "rgba(255, 255, 255, 0.2)",
+                                "xAxis-line-color": "rgba(255, 255, 255, 0.2)",
+                                "line-color-1": "#2178FF",
+                                "line-color-2": "rgba(111, 101, 221, 1)",
+                                "line-color-3": "rgba(107, 221, 101, 1)",
+                                "line-color-4": "#DBDD65",
+                                "line-color-5": "rgba(221, 101, 165, 1)",
+                                "line-color-6": "rgba(101, 181, 221, 1)",
+                                "legend-color": "rgba(255, 255, 255, 1)",
+                                "line-warning-color": "rgba(255, 33, 192, 1)",
+                                "mark-line-color": "rgba(33, 255, 229, 1)",
+                                "mark-label-color": "rgba(255, 255, 255, 1)",
+                                "mark-label-background-color": "#2178FF",
+                                "xAxis-mark-line-color": ""
+                            }
+                        },
+                        "70": {
+                            "chart": {
+                                "background": "#31323F",
+                                "xAxis-text-color": "rgba(255, 255, 255, 0.5)",
+                                "yAxis-text-color": "rgba(255, 255, 255, 0.5)",
+                                "splitLine-color": "rgba(255, 255, 255, 0.2)",
+                                "xAxis-line-color": "rgba(255, 255, 255, 0.2)",
+                                "line-color-1": "#7B7BED",
+                                "line-color-2": "rgba(101, 185, 221, 1)",
+                                "line-color-3": "rgba(107, 221, 101, 1)",
+                                "line-color-4": "#DBDD65",
+                                "line-color-5": "rgba(221, 101, 165, 1)",
+                                "line-color-6": "rgba(101, 181, 221, 1)",
+                                "legend-color": "rgba(255, 255, 255, 0，5)",
+                                "line-warning-color": "rgba(237, 123, 186, 1)",
+                                "mark-line-color": "rgba(61, 247, 173, 1)",
+                                "mark-label-color": "rgba(255, 255, 255, 1)",
+                                "mark-label-background-color": "#7B7BED",
+                                "xAxis-mark-line-color": ""
+                            }
+                        },
+                        "72": {
+                            "chart": {
+                                "background": "#F2F4F7",
+                                "xAxis-text-color": "#333333",
+                                "yAxis-text-color": "#333333",
+                                "splitLine-color": "rgba(189, 193, 201, 1)",
+                                "xAxis-line-color": "rgba(189, 193, 201, 1)",
+                                "line-color-1": "rgba(154, 204, 142, 1)",
+                                "line-color-2": "rgba(204, 184, 142, 1)",
+                                "line-color-3": "rgba(204, 142, 167, 1)",
+                                "line-color-4": "rgba(142, 204, 195, 1)",
+                                "line-color-5": "rgba(142, 157, 204, 1)",
+                                "line-color-6": "rgba(142, 204, 178, 1)",
+                                "legend-color": "#333333",
+                                "line-warning-color": "rgba(204, 142, 177, 1)",
+                                "mark-line-color": "rgba(38, 232, 109, 1)",
+                                "mark-label-color": "rgba(255, 255, 255, 1)",
+                                "mark-label-background-color": "#C35F5F",
+                                "xAxis-mark-line-color": ""
+                            }
+                        },
+                        "73": {
+                            "chart": {
+                                "background": "#1A1B24",
+                                "xAxis-text-color": "rgba(255, 255, 255, 0.7)",
+                                "yAxis-text-color": "rgba(255, 255, 255, 0.7)",
+                                "splitLine-color": "rgba(255, 255, 255, 0.2)",
+                                "xAxis-line-color": "rgba(255, 255, 255, 0.2)",
+                                "line-color-1": "#38E9C9",
+                                "line-color-2": "rgba(111, 101, 221, 1)",
+                                "line-color-3": "rgba(107, 221, 101, 1)",
+                                "line-color-4": "#DBDD65",
+                                "line-color-5": "rgba(221, 101, 165, 1)",
+                                "line-color-6": "rgba(101, 181, 221, 1)",
+                                "legend-color": "rgba(255, 255, 255, 0.5)",
+                                "line-warning-color": "rgba(233, 56, 153, 1)",
+                                "mark-line-color": "rgba(56, 203, 233, 1)",
+                                "mark-label-color": "rgba(0, 0, 0, 1)",
+                                "mark-label-background-color": "#38E9C9",
+                                "xAxis-mark-line-color": ""
+                            }
+                        }
+                    },
+                    "command": {
+                        "button-gap": "6px",
+                        "button-height": "36px",
+                        "button-padding": "10px",
+                        "button-box-shadow": "0 2px 12px 0",
+                        "button-box-shadow-color": "rgba(0, 0, 0, 0)",
+                        "button-border-radius": "4px",
+                        "button-background": "#1A1B24",
+                        "button-text-color": "#A7A8B2",
+                        "button-border-color": "rgba(95, 98, 124, 0.4)",
+                        "button-hover-background": "rgba(247, 119, 54, 0.3)",
+                        "button-hover-text-color": "rgba(247, 119, 54, 1)",
+                        "button-hover-border-color": "rgba(247, 119, 54, 0.3)",
+                        "button-active-background": "rgba(247, 119, 54, 0.3)",
+                        "button-active-text-color": "rgba(247, 119, 54, 13)",
+                        "button-active-border-color": "rgba(247, 119, 54, 0.3)",
+                        "button-disabled-background": "#1A1B24",
+                        "button-disabled-text-color": "rgba(167, 168, 178, 0.4)",
+                        "button-disabled-border-color": "#1A1B24"
+                    },
+                    "drawer": {
+                        "background": "",
+                        "shadow": ""
+                    }
+                },
+                "id": 59
+            },
+            "loginUrl": "/main-app/login",
+            "homeUrl": "/main-app/dashboard",
+            "themeApiUrl": "/gateway/integrated-management/api/v1/theme/list",
+            "loginApiUrl": "/gateway/integrated-management/api/v1/account/login",
+            "translateApiUrl": "/gateway/integrated-management/api/v1/translate/get",
+            "userConfigApiUrl": "/gateway/integrated-management/api/v1/basic/data/frontendConfig",
+            "environment": "production",
+            "isRenderToolbar": false,
+            "isRenderIssue": false,
+            "isRenderLang": true,
+            "systemKey": "cloud",
+            "isTranslateApi": false,
+            "whitelistTranslateApi": [],
+            "autoGetSystemConfig": true
         }
-        if(document.querySelector(".page-wrap")){
-            document.querySelector(".page-wrap").style.height = "100vh"
-        }
-    })
-
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-    })
-    // Example: Remove elements with class 'ad-banner' and id 'popup'
-    removeSel('body > uni-app > uni-tabbar > div.uni-tabbar > div:nth-child(3)')
-    removeSel('body > uni-app > uni-tabbar > div.uni-tabbar > div:nth-child(4)')
-})
+        
+        // 存入 localStorage
+        localStorage.setItem('ttcGlobalState', JSON.stringify(ttcGlobalState))
+        console.log('ttcGlobalState 已存入 localStorage，token:', token)
+    }
+    
+    location.href = url
+}
